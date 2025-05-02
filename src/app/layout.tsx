@@ -1,11 +1,10 @@
-import type {Metadata} from 'next';
-import { GeistSans, GeistMono } from 'geist/font'; // Correct import path
-import './globals.css';
-import { Toaster } from '@/components/ui/toaster'; // Import Toaster
+import type { Metadata } from "next";
+import "./globals.css";
+import { Toaster } from "@/components/ui/toaster"; // Importando o Toaster
 
 export const metadata: Metadata = {
-  title: 'Furia Fan Zone', // Updated title
-  description: 'Acompanhe e interaja com a torcida da FURIA em tempo real!', // Updated description
+  title: "Furia Fan Zone", // Título atualizado
+  description: "Acompanhe e interaja com a torcida da FURIA em tempo real!", // Descrição atualizada
 };
 
 export default function RootLayout({
@@ -13,11 +12,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
-    <html lang="pt-BR"> {/* Changed lang to Portuguese Brazil */}
-      <body className={`${GeistSans.variable} ${GeistMono.variable} antialiased dark`}> {/* Add dark class, removed font variables from class */}
+    <html lang="pt-BR" className="dark"> 
+      <body className={`antialiased`}>
         {children}
-        <Toaster /> {/* Add Toaster component */}
+        <Toaster />
       </body>
     </html>
   );

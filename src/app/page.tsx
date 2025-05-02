@@ -4,21 +4,20 @@ import { useState, useEffect, useRef, useMemo, ChangeEvent, MouseEvent } from "r
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"; // Import ScrollBar
-import { Checkbox } from "@/components/ui/checkbox"; // Import Checkbox
-import { Label } from "@/components/ui/label"; // Import Label
-import { motion, AnimatePresence } from "framer-motion"; // Import AnimatePresence
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"; 
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { motion, AnimatePresence } from "framer-motion"; 
 import { Smile, ThumbsUp, LogIn, UploadCloud } from "lucide-react";
-import type { TwitchChannel } from "@/services/twitch"; // Import Twitch types if needed (assuming service exists)
-// import { getTwitchChannelInfo } from "@/services/twitch"; // Import Twitch function if needed
+import type { TwitchChannel } from "@/services/twitch"; 
 
 interface Message {
   id: number;
   user: string;
   message: string;
   reactions: number;
-  file?: string; // URL for the file
-  fileType?: string; // Mime type
+  file?: string; 
+  fileType?: string; 
 }
 
 interface PollOption {
@@ -51,19 +50,19 @@ export default function Home() {
   const [messages, setMessages] = useState<Message[]>(mockMessages);
   const [input, setInput] = useState("");
   const [status, setStatus] = useState("AQUECENDO");
-  const [user, setUser] = useState<string | null>(null); // Store user nickname or null
+  const [user, setUser] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null); // Keep previewUrl if needed for UI
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [poll, setPoll] = useState<Poll>({
     question: "Quem foi o MVP do último jogo?",
     options: [
-      { text: "arT", votes: 0 },
+      { text: "FalleN", votes: 0 },
       { text: "KSCERATO", votes: 0 },
       { text: "yuurih", votes: 0 }
     ]
   });
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
-  const [twitchChannelInfo, setTwitchChannelInfo] = useState<TwitchChannel | null>(null); // State for Twitch info
+  const [twitchChannelInfo, setTwitchChannelInfo] = useState<TwitchChannel | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -73,8 +72,8 @@ export default function Home() {
   // Initialize audio only on client-side
    useEffect(() => {
     if (typeof Audio !== "undefined") {
-      notificationSoundRef.current = new Audio("/notification.mp3"); // Assuming notification.mp3 is in public folder
-      notificationSoundRef.current.load(); // Preload the audio
+      notificationSoundRef.current = new Audio("/notification.mp3");
+      notificationSoundRef.current.load();
     }
   }, []);
 
@@ -91,7 +90,7 @@ export default function Home() {
       setMessages((prev) => [
         ...prev,
         {
-          id: Date.now(), // Use timestamp for unique ID
+          id: Date.now(),
           user: "Bot",
           message: `Status do jogo: ${newStatus}`,
           reactions: 0,
@@ -100,33 +99,17 @@ export default function Home() {
       if (notificationSoundRef.current && notificationsEnabled) {
          notificationSoundRef.current.play().catch(error => console.error("Audio play failed:", error));
       }
-    }, 30000); // 30 seconds
+    }, 30000);
 
     return () => clearInterval(interval);
-  }, [status, notificationsEnabled]); // Rerun when status or notification setting changes
+  }, [status, notificationsEnabled]);
 
   // Scroll to bottom effect
   useEffect(() => {
     if (viewportRef.current) {
       viewportRef.current.scrollTop = viewportRef.current.scrollHeight;
     }
-  }, [messages]); // Dependency on messages to scroll when new message arrives
-
-  // Fetch Twitch Info Effect (Example - needs actual implementation)
-  // useEffect(() => {
-  //   async function fetchTwitch() {
-  //     try {
-  //       const info = await getTwitchChannelInfo('furiagg');
-  //       setTwitchChannelInfo(info);
-  //     } catch (error) {
-  //       console.error("Failed to fetch Twitch info:", error);
-  //     }
-  //   }
-  //   // fetchTwitch(); // Uncomment when getTwitchChannelInfo is implemented
-  //   // Fetch periodically?
-  //   // const intervalId = setInterval(fetchTwitch, 60000); // Fetch every minute
-  //   // return () => clearInterval(intervalId);
-  // }, []);
+  }, [messages]);
 
 
   const sendMessage = () => {
@@ -144,9 +127,9 @@ export default function Home() {
           fileType: file.type,
           reactions: 0,
         };
-        setFile(null); // Clear file state after creating URL
-        setPreviewUrl(null); // Clear preview URL
-         if (fileInputRef.current) fileInputRef.current.value = ""; // Reset file input
+        setFile(null);
+        setPreviewUrl(null);
+         if (fileInputRef.current) fileInputRef.current.value = "";
     } else {
         messageContent = {
             id: Date.now(),
@@ -158,7 +141,7 @@ export default function Home() {
 
 
     setMessages((prev) => [...prev, messageContent]);
-    setInput(""); // Clear input field
+    setInput(""); 
 
     if (notificationSoundRef.current && notificationsEnabled) {
        notificationSoundRef.current.play().catch(error => console.error("Audio play failed:", error));
@@ -187,16 +170,11 @@ export default function Home() {
     const selected = e.target.files?.[0];
     if (selected) {
         setFile(selected);
-        // Optionally set input text to file name, or handle preview
-        setInput(selected.name); // Update input field to show file name
-        // if (selected.type.startsWith('image/')) {
-        //     setPreviewUrl(URL.createObjectURL(selected));
-        // } else {
-        //     setPreviewUrl(null);
-        // }
+        
+        setInput(selected.name); 
     } else {
-        // Handle case where file selection is cancelled
-        if (input === file?.name) { // Clear input only if it was the filename
+        
+        if (input === file?.name) { 
             setInput("");
         }
         setFile(null);
@@ -212,7 +190,7 @@ export default function Home() {
         opt.text === optionText ? { ...opt, votes: opt.votes + 1 } : opt
       )
     }));
-    // Optional: Add visual feedback or disable voting after one vote
+    
   };
 
   const ranking = useMemo(() => {
@@ -222,13 +200,13 @@ export default function Home() {
       counts[msgUser] = (counts[msgUser] || 0) + 1;
     });
     return Object.entries(counts)
-      .sort(([, countA], [, countB]) => countB - countA) // Sort by count descending
-      .slice(0, 5); // Top 5
+      .sort(([, countA], [, countB]) => countB - countA) 
+      .slice(0, 5);
   }, [messages]);
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault(); // Prevent new line on Enter
+      e.preventDefault();
       sendMessage();
     }
   };
@@ -242,20 +220,14 @@ export default function Home() {
       {/* Twitch Embed */}
       <div className="w-full max-w-4xl mb-6 rounded-lg overflow-hidden shadow-lg border border-border">
         <iframe
-          src="https://player.twitch.tv/?channel=furiagg&parent=localhost&muted=true" // Mute by default, parent=localhost might need changing for deployment
-          height="400" // Adjusted height
+          src="https://player.twitch.tv/?channel=https://player.twitch.tv/?channel=dubblez&enableExtensions=true&muted=false&parent=twitch.tv&player=popout&quality=auto&volume=0.1&parent=localhost&muted=true" // Mute by default, parent=localhost might need changing for deployment
+          height="400" 
           width="100%"
           allowFullScreen
-          className="aspect-video" // Maintain aspect ratio
+          className="aspect-video"
           title="FURIAgg Twitch Stream"
         ></iframe>
-         {/* Optional: Display fetched Twitch info */}
-         {/* {twitchChannelInfo && (
-          <div className="p-4 bg-card-foreground/10 text-sm">
-            <p><strong>{twitchChannelInfo.streamTitle}</strong></p>
-            <p>{twitchChannelInfo.viewers.toLocaleString()} espectadores</p>
-          </div>
-         )} */}
+         
       </div>
 
       {/* Ranking Card */}
@@ -287,9 +259,9 @@ export default function Home() {
             {poll.options.map((option) => (
               <Button
                 key={option.text}
-                variant="secondary" // Use secondary variant
+                variant="secondary"
                 onClick={() => handleVote(option.text)}
-                className="w-full justify-start text-left hover:bg-accent" // Adjusted styles
+                className="w-full justify-start text-left hover:bg-accent"
               >
                 {option.text} ({option.votes} votos)
               </Button>
@@ -319,6 +291,8 @@ export default function Home() {
         </Button>
       )}
 
+      
+
       {/* Chat Card */}
       <Card className="w-full max-w-4xl bg-card rounded-lg shadow-lg p-4 md:p-6 border border-border">
         <CardContent className="space-y-4">
@@ -329,11 +303,11 @@ export default function Home() {
                 {messages.map((msg) => (
                   <motion.div
                     key={msg.id}
-                    layout // Add layout animation
+                    layout 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, transition: { duration: 0.2 } }} // Add exit animation
-                    className="bg-secondary p-3 rounded-lg shadow relative" // Use secondary for message background
+                    exit={{ opacity: 0, transition: { duration: 0.2 } }}
+                    className="bg-secondary p-3 rounded-lg shadow relative"
                   >
                     <span className={`font-semibold ${msg.user === 'Bot' ? 'text-cyan-400' : 'text-purple-400'}`}>{msg.user}:</span>{' '}
                     <span className="whitespace-pre-wrap break-words">{msg.message}</span> {/* Handle line breaks and long words */}
@@ -369,49 +343,27 @@ export default function Home() {
               </div>
              <ScrollBar orientation="vertical" />
           </ScrollArea>
-
-          {/* Input Area */}
-          {user && (
-            <div className="flex flex-col sm:flex-row gap-2 mt-4">
-              <div className="flex-grow flex gap-2">
-                 <Input
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyPress={handleKeyPress} // Add keypress handler
-                    placeholder="Digite sua mensagem ou anexe um arquivo..."
-                    className="bg-input border-border text-foreground rounded-lg p-3 flex-grow" // Use input color
-                    aria-label="Campo de mensagem"
-                    disabled={!user} // Disable if not logged in
-                />
-                <Button
-                    onClick={() => fileInputRef.current?.click()}
-                    variant="outline"
-                    className="border-border hover:bg-accent text-muted-foreground rounded-lg"
-                    aria-label="Anexar arquivo"
-                    disabled={!user}
-                    >
-                    <UploadCloud size={18} />
-                </Button>
-                <input
-                    ref={fileInputRef}
-                    type="file"
-                    onChange={handleFileChange}
-                    className="hidden"
-                    accept="image/*,audio/*,video/*" // Specify acceptable file types
-                />
-              </div>
-              <Button
-                onClick={sendMessage}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg px-4 py-2 sm:px-6 flex items-center justify-center gap-1" // Adjusted padding and added justify-center
-                disabled={(!input.trim() && !file) || !user} // Disable if no input/file or not logged in
-              >
-                <Smile size={18} />
-                <span className="hidden sm:inline">Enviar</span> {/* Hide text on small screens */}
-              </Button>
-            </div>
-          )}
         </CardContent>
       </Card>
+      {/* Input area */}
+      <div className="w-full max-w-4xl mb-6 rounded-lg overflow-hidden shadow-lg border border-border p-4">
+        <div className="flex flex-col sm:flex-row gap-2 mt-4">
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={handleKeyPress} 
+            placeholder="Digite sua mensagem..."
+            className="bg-input border-border text-foreground rounded-lg p-3 flex-grow"
+            aria-label="Campo de mensagem"
+            disabled={!user}
+          />
+          <Button
+            onClick={sendMessage}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg px-4 py-2 sm:px-6 flex items-center justify-center gap-1"
+            disabled={!input.trim() || !user} 
+          >Enviar</Button>
+        </div>
+      </div>
 
        {/* WhatsApp Link */}
       <div className="mt-6 text-center text-muted-foreground text-sm">

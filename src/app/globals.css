@@ -91,8 +91,6 @@ body {
   }
 }
 
-/* Add custom styles for specific elements if needed */
-/* Example: Make sure checkbox uses accent color */
 @layer components {
   .dark input[type="checkbox"] {
     color: hsl(var(--primary)); /* Use primary (yellow) for checkbox */
