@@ -32,7 +32,7 @@ interface Poll {
 
 const mockMessages: Message[] = [
   { id: 1, user: "Torcedor1", message: "GO FURIAAAAA! 🔥", reactions: 0 },
-  { id: 2, user: "Torcedor2", message: "Alguém viu o clutch do arT? Insano!", reactions: 0 },
+  { id: 2, user: "Torcedor2", message: "Alguém viu o clutch do FalleN? Insano!", reactions: 0 },
   { id: 3, user: "Bot", message: "Jogo contra NAVI começa às 19h - status: AQUECENDO 🔥", reactions: 0 },
 ];
 
